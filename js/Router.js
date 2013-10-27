@@ -1,9 +1,11 @@
 define([
    "backbone",
    "marionette",
-   "./app"
+   "./app",
+   "views/AchievementView",
+   "models/Achievement"
 ],
-function (Backbone, Marionette, app){
+function (Backbone, Marionette, app, AchievementView, Achievement){
 
     "use strict";
 
@@ -12,7 +14,7 @@ function (Backbone, Marionette, app){
         routes: {
 
             "/" : "home",
-            "application/:id" : "detail"
+            "achievementStats/:id" : "detail"
         },
 
         home: function() {

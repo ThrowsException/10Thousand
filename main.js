@@ -24,13 +24,18 @@ app.get('/achievements', function(req, res) {
 app.get('/achievementStats/:id', function(req, res) {
   achievementController.findById(req.params.id, function(error, docs) {
     //lets keep the updates array in order by date
-    docs.updates.sort(function(a, b) {
-      //guard against nulls or undefined in the array
-      if(a && b) {
-        return a[0] - b[0];
-      }
-    });
-    res.send(docs);
+    if(docs && docs.updates){
+      docs.updates.sort(function(a, b) {
+        //guard against nulls or undefined in the array
+        if(a && b) {
+          return a[0] - b[0];
+        }
+      });
+      res.send(docs);
+    }
+    else {
+      res.send(docs);
+    }
   });
 });
 
