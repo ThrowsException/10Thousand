@@ -57,6 +57,14 @@ AchievementController.prototype.findById = function(id, callback) {
   });
 };
 
+AchievementController.prototype.create = function(achievement, callback) {
+  this.getCollection(function(error, article_collection) {
+    console.log(achievement);
+    article_collection.save({ name : achievement }, callback(error))
+  });
+};
+
+
 AchievementController.prototype.save = function(goalUpdate, callback) {
   this.getCollection(function(error, article_collection) {
     article_collection.update({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(goalUpdate.id) },

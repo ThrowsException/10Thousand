@@ -11,13 +11,29 @@ define([
     var AchievementCollectionView = Backbone.Marionette.CompositeView.extend({
       collection: new Achievements(),
       
+      events: {
+        'click #add': 'add'
+      },
+
       itemView: AchievementItemView,
       itemViewContainer: 'ul',
       template: _.template(html),
       
       initialize: function() {
         this.collection.fetch();
+      },
+
+      add: function (){
+        var data = {}
+        data.name = $('#newAchievement').val();
+
+        $.ajax({
+          type: "POST",
+          url: "/achievement",
+          data: data
+        });
       }
+
     });
 
   return AchievementCollectionView;
