@@ -15,6 +15,12 @@ app.get('/', function(req, res) {
 	res.sendfile('index.html');
 });
 
+app.get('/achievements', function(req, res) {
+	achievementController.findAll(function(error, docs) {
+		res.send(docs);
+	});
+});
+
 app.get('/achievementStats/:id', function(req, res) {
 	achievementController.findById(req.params.id, function(error, docs) {
 		//lets keep the updates array in order by date

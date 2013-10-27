@@ -2,8 +2,8 @@ define(['underscore', 'backbone'],
   function(_, Backbone) {
   
   var AchievementCollection = Backbone.Collection.extend({
-
-    url: '/achievements',
+    url: '/achievements'
+  });
 
   return AchievementCollection;
 });

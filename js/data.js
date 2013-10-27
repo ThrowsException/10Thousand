@@ -1,4 +1,4 @@
-var data = {
+var TestData = {
 	name: "Guitar",
 	data: [
 		[

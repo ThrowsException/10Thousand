@@ -1,9 +1,10 @@
 define(['backbone'], function(Backbone) {
-	var Achievement = Backbone.Model.extend({
-		idAttribute: "_id",
+  var Achievement = Backbone.Model.extend({
 
-		urlRoot: '/achievementStats'
-	});
+    idAttribute: "_id",
 
-	return Achievement;
+    urlRoot: '/achievementStats'
+  });
+
+  return Achievement;
 });
