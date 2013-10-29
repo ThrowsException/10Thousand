@@ -1,5 +1,5 @@
-define(["marionette", 'collections/Achievements','views/AchievementCollectionView', 'views/AchievementView'], 
-  function(Marionette, Achievements, AchievementCollectionView, AchievementView) {
+define(["marionette", 'collections/Achievements','views/AchievementCollectionView'], 
+  function(Marionette, Achievements, AchievementCollectionView) {
     var app = new Marionette.Application();
 
     app.addRegions({
@@ -11,13 +11,6 @@ define(["marionette", 'collections/Achievements','views/AchievementCollectionVie
         collection: new Achievements()
       })
     );
-
-    // app.main.show(new AchievementView({
-    //  model: new Achievement({
-    //    _id: '513fccfa559a9ce329183004'
-    //  })
-    // })
-    // );
   });
 
   return app;

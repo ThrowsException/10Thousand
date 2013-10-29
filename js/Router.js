@@ -3,17 +3,18 @@ define([
    "marionette",
    "./app",
    "views/AchievementView",
+   "views/AchievementCollectionView",
+   "collections/Achievements",
    "models/Achievement"
 ],
-function (Backbone, Marionette, app, AchievementView, Achievement){
+function (Backbone, Marionette, app, AchievementView, AchievementCollectionView, Achievements, Achievement){
 
     "use strict";
 
     var AppRouter = Backbone.Marionette.AppRouter.extend({
 
         routes: {
-
-            "/" : "home",
+            "" : "home",
             "achievementStats/:id" : "detail"
         },
 

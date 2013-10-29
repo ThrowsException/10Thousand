@@ -59,7 +59,6 @@ AchievementController.prototype.findById = function(id, callback) {
 
 AchievementController.prototype.create = function(achievement, callback) {
   this.getCollection(function(error, article_collection) {
-    console.log(achievement);
     article_collection.save({ name : achievement }, callback(error))
   });
 };
