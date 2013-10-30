@@ -3,13 +3,14 @@ var fs = require('fs');
 var path = require('path');
 var app = express();
 var AchievementController = require('./AchievementController').AchievementController;
+var UserController = require('./UserController').UserController;
 
 app.use(express.bodyParser());
 app.use(app.router);
 app.use(express.static(__dirname));
 
 var achievementController = new AchievementController('localhost', 27017);
-
+var userController = new UserController('localhost', 27017);
 
 app.get('/', function(req, res) {
   res.sendfile('index.html');
@@ -41,6 +42,17 @@ app.get('/achievementStats/:id', function(req, res) {
 
 app.post('/achievement', function(req, res) {
   achievementController.create(req.body.name, function(error, result) {
+    if(error) {
+      res.send(error);
+    }
+    else {
+      res.send(result);
+    }
+  });
+});
+
+app.post('/user', function(req, res) {
+  userController.create(req.body.name, function(error, result) {
     if(error) {
       res.send(error);
     }
