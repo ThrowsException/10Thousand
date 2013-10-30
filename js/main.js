@@ -32,7 +32,7 @@ require.config({
   }
 });
 
-require(['../app', '../Router', 'backbone'], function(app, router, Backbone) {
+require(['../app', '../router', 'backbone'], function(app, router, Backbone) {
   app.Router = router;
   app.start();
 
