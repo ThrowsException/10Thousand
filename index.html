@@ -25,20 +25,15 @@
 			    gapi.auth.setToken(authResult);
 			    gapi.client.load('oauth2', 'v2', function() {
 		          var request = gapi.client.oauth2.userinfo.get();
-		          request.execute(function(obj){
+		          request.execute(function(obj) {
 		          	console.log(obj);
-		          });
+		          	$.ajax({
+		          		url: "/user",
+				       	type: 'PUT',
+				       	data: obj.result
+				       });
+	          		});
 		        });
-
-
-			    gapi.client.load('plus','v1', function(){
-			        var request = gapi.client.plus.people.get({
-				        'userId': 'me'
-			      	});
-			      	request.execute(function(response) {
-				       console.log(response);
-			      	});
-		      	});
 		  	} else if (authResult['error']) {
 			    // Update the app to reflect a signed out user
 			    // Possible error values:

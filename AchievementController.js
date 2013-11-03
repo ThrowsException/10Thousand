@@ -11,7 +11,6 @@ AchievementController = function(host, port) {
   this.db.open(function() {});
 };
 
-
 AchievementController.prototype.getCollection = function(callback) {
   this.db.collection('achievements', function(error, article_collection) {
     if (error) {
@@ -38,7 +37,6 @@ AchievementController.prototype.findAll = function(callback) {
   });
 };
 
-
 AchievementController.prototype.findById = function(id, callback) {
   this.getCollection(function(error, article_collection) {
     if (error) {
@@ -63,9 +61,9 @@ AchievementController.prototype.create = function(achievement, callback) {
   });
 };
 
-
 AchievementController.prototype.save = function(goalUpdate, callback) {
   this.getCollection(function(error, article_collection) {
+    console.log(goalUpdate.id);
     article_collection.update({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(goalUpdate.id) },
       { $push: { updates: goalUpdate.update } },
       {upsert: true, w:1 }, function(error, result) {

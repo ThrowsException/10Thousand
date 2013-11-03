@@ -64,7 +64,6 @@ UserController.prototype.create = function(user, callback) {
   });
 };
 
-
 UserController.prototype.save = function(identity, user, callback) {
   this.getCollection(function(error, article_collection) {
     article_collection.update({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(goalUpdate.id) },

@@ -51,8 +51,8 @@ app.post('/achievement', function(req, res) {
   });
 });
 
-app.post('/user', function(req, res) {
-  userController.create(req.body.name, function(error, result) {
+app.put('/user', function(req, res) {
+  userController.create(req.body, function(error, result) {
     if(error) {
       res.send(error);
     }
