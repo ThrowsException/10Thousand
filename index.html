@@ -1,70 +1,72 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>My Sample Project</title>		
-		<script src="js/data.js"></script>
+  <head>
+    <title>My Sample Project</title>
         <!-- data-main attribute tells require.js to load
              scripts/main.js after require.js loads. -->
         <script data-main="js/main" src="js/lib/require.js"></script>
 
-	<head>
-	<!-- Sign in with Google -->
+  <head>
+  <!-- Sign in with Google -->
     <script type="text/javascript">
-      	(function() {
-	    	var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-	     	po.src = 'https://apis.google.com/js/client:plusone.js';
-	      	var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-	     })();
-
-    	function signinCallback(authResult) {
-		 	if (authResult['access_token']) {
-			    // Update the app to reflect a signed in user
-			    // Hide the sign-in button now that the user is authorized, for example:
-			    document.getElementById('signinButton').setAttribute('style', 'display: none');
-			    
-			    gapi.auth.setToken(authResult);
-			    gapi.client.load('oauth2', 'v2', function() {
-		          var request = gapi.client.oauth2.userinfo.get();
-		          request.execute(function(obj) {
-		          	console.log(obj);
-		          	$.ajax({
-		          		url: "/user",
-				       	type: 'PUT',
-				       	data: obj.result
-				       });
-	          		});
-		        });
-		  	} else if (authResult['error']) {
-			    // Update the app to reflect a signed out user
-			    // Possible error values:
-			    //   "user_signed_out" - User is signed-out
-			    //   "access_denied" - User denied access to your app
-			    //   "immediate_failed" - Could not automatically log in the user
-			    console.log('Sign-in state: ' + authResult['error']);
-		  		}
-			}
+      function signinCallback(authResult) {
+        if (authResult['access_token']) {
+          // Update the app to reflect a signed in user
+          // Hide the sign-in button now that the user is authorized, for example:
+          document.getElementById('signinButton').setAttribute('style', 'display: none');
+          
+          gapi.auth.setToken(authResult);
+          gapi.client.load('oauth2', 'v2', function() {
+            var request = gapi.client.oauth2.userinfo.get();
+            request.execute(function(obj) {
+              console.log(obj);
+              $.ajax({
+                url: "/user",
+                type: 'PUT',
+                data: obj.result
+             });
+            });
+          });
+        } else if (authResult['error']) {
+            // Update the app to reflect a signed out user
+            // Possible error values:
+            //   "user_signed_out" - User is signed-out
+            //   "access_denied" - User denied access to your app
+            //   "immediate_failed" - Could not automatically log in the user
+            document.getElementById('signinButton').setAttribute('style', 'display: show');
+            console.log('Sign-in state: ' + authResult['error']);
+          }
+      }
     </script>
 
-	<body>
-		<h1>Track your expertise, Share it with friends</h1>
-		<span id="signinButton">
-		  <span
-		    class="g-signin"
-		    data-callback="signinCallback"
-		    data-clientid="1054789771996-n8m4lfo4f98musj8i52q04fn0up8qddt.apps.googleusercontent.com"
-		    data-cookiepolicy="single_host_origin"
-		    data-requestvisibleactions="http://schemas.google.com/AddActivity"
-		    data-scope="https://www.googleapis.com/auth/userinfo.email"
-		    data-accesstype="offline">
-		  </span>
-		</span>
-		<input id="signoutButton" type="button" value="Sign Out"/>
-		<div id="content"></div>
-	</body>
+    <script>
+    (function() {
+      var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+      po.src = 'https://apis.google.com/js/client:plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+    })();
+    </script>
 
-	<script>
-		document.getElementById('signoutButton').addEventListener('click', function(){
-			gapi.auth.signOut();
-		});
-	</script>
+  <body>
+    <h1>Track your expertise, Share it with friends</h1>
+    <span id="signinButton">
+      <span
+        class="g-signin"
+        data-callback="signinCallback"
+        data-clientid="1054789771996-n8m4lfo4f98musj8i52q04fn0up8qddt.apps.googleusercontent.com"
+        data-cookiepolicy="single_host_origin"
+        data-requestvisibleactions="http://schemas.google.com/AddActivity"
+        data-scope="https://www.googleapis.com/auth/userinfo.email"
+        >
+      </span>
+    </span>
+    <input id="signoutButton" type="button" value="Sign Out"/>
+    <div id="content"></div>
+  </body>
+
+  <script>
+    document.getElementById('signoutButton').addEventListener('click', function(){
+      gapi.auth.signOut();
+    });
+  </script>
 </html>
