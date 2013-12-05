@@ -4,10 +4,11 @@ define([
    "./app",
    "views/AchievementView",
    "views/AchievementCollectionView",
+   "views/LoginView",
    "collections/Achievements",
    "models/Achievement"
 ],
-function (Backbone, Marionette, app, AchievementView, AchievementCollectionView, Achievements, Achievement){
+function (Backbone, Marionette, app, AchievementView, AchievementCollectionView, LoginView, Achievements, Achievement){
 
     "use strict";
 
@@ -15,7 +16,8 @@ function (Backbone, Marionette, app, AchievementView, AchievementCollectionView,
 
         routes: {
             "" : "home",
-            "achievementStats/:id" : "detail"
+            "achievementStats/:id" : "detail",
+            "login" : "login"
         },
 
         home: function() {
@@ -30,6 +32,10 @@ function (Backbone, Marionette, app, AchievementView, AchievementCollectionView,
              _id: id
             })
           }));
+        },
+
+        login: function() {
+          app.main.show(new LoginView())
         }
     });
 
