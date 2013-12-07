@@ -29,17 +29,18 @@ passport.deserializeUser(function(_id, done) {
   });
 });
 
-passport.use(new LocalStrategy(
+passport.use(new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password' //for completeness
+  },
   function(username, password, done) {
     userController.getCollection(function(error, collection) {
-      collection.findOne({}, function(err, user) {
-        if (err) { console.log(err); return done(err); }
+      collection.findOne({ email : username }, function(err, user) {
+        if (err) { return done(err); }
         if (!user) {
-          console.log("no user");
           return done(null, false, { message: 'Incorrect username.' });
         }
         if (!password) {
-          console.log("password invalid");
           return done(null, false, { message: 'Incorrect password.' });
         }
         return done(null, user);
@@ -52,13 +53,13 @@ app.get('/', function(req, res) {
   res.sendfile('index.html');
 });
 
-app.get('/achievements', function(req, res) {
+app.get('/achievements', loggedIn, function(req, res) {
   achievementController.findAll(function(error, docs) {
     res.send(docs);
   });
 });
 
-app.get('/achievementStats/:id', function(req, res) {
+app.get('/achievementStats/:id', loggedIn, function(req, res) {
   achievementController.findById(req.params.id, function(error, docs) {
     //lets keep the updates array in order by date
     if(docs && docs.updates){
@@ -76,7 +77,7 @@ app.get('/achievementStats/:id', function(req, res) {
   });
 });
 
-app.post('/achievement', function(req, res) {
+app.post('/achievement', loggedIn, function(req, res) {
   achievementController.create(req.body.name, function(error, result) {
     if(error) {
       res.send(error);
@@ -87,7 +88,7 @@ app.post('/achievement', function(req, res) {
   });
 });
 
-app.put('/user', function(req, res) {
+app.put('/user', loggedIn, function(req, res) {
   userController.create(req.body, function(error, result) {
     if(error) {
       res.send(error);
@@ -100,11 +101,11 @@ app.put('/user', function(req, res) {
 
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/',
-                                   failureRedirect: '/#/login',
+                                   failureRedirect: '/#login',
                                    failureFlash: false })
 );
 
-app.put('/achievementStats/:id', function(req, res) {
+app.put('/achievementStats/:id', loggedIn, function(req, res) {
   var update = [];
   update.push(Number(req.body.date), Number(req.body.hours));
   achievementController.save({
@@ -115,5 +116,14 @@ app.put('/achievementStats/:id', function(req, res) {
   });
 });
 
+function loggedIn(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.send(401, {});
+  }
+};
+
 app.listen(3000);
 console.log('Listening at 3000');
+

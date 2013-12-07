@@ -62,7 +62,12 @@ define(['underscore', 'backbone', 'marionette', 'highcharts', 'text!templates/Ac
 				error: function() {
 					self.$el.html("<h1>Nothing Here Silly</h1>");
 				}
-			});
+			}).fail(
+        function(error){
+          if(error.status === 401){
+            Backbone.history.navigate('login', { trigger : true });
+          }
+      });
 		}
 	});
 

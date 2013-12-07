@@ -20,7 +20,12 @@ define([
       template: _.template(html),
       
       initialize: function() {
-        this.collection.fetch();
+        this.collection.fetch().fail(
+          function(error){
+            if(error.status === 401){
+              Backbone.history.navigate('login', { trigger : true });
+            }
+        });
       },
 
       add: function (){
