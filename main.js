@@ -54,7 +54,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/achievements', loggedIn, function(req, res) {
-  achievementController.findAll(function(error, docs) {
+  achievementController.findAll(req.user._id, function(error, docs) {
     res.send(docs);
   });
 });
@@ -78,7 +78,7 @@ app.get('/achievementStats/:id', loggedIn, function(req, res) {
 });
 
 app.post('/achievement', loggedIn, function(req, res) {
-  achievementController.create(req.body.name, function(error, result) {
+  achievementController.create(req.body.name, req.user._id, function(error, result) {
     if(error) {
       res.send(error);
     }
