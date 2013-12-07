@@ -42,6 +42,9 @@ define(['underscore', 'backbone', 'marionette', 'highcharts', 'text!templates/Ac
 								renderTo: self.$el.find("div:first")[0],
 								type: 'area'
 							},
+							title:{
+								text: self.model.get("name")
+							},
 							xAxis: {
 								type: 'datetime',
 								tickInterval: 2 * 7 * 24 * 3600 * 1000, // two weeks
