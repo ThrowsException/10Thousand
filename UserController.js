@@ -72,7 +72,7 @@ UserController.prototype.findOne = function(query, callback) {
       });
     }
   });
-});
+};
 
 UserController.prototype.create = function(user, callback) {
   this.getCollection(function(error, article_collection) {

@@ -6,6 +6,7 @@ var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var AchievementController = require('./AchievementController').AchievementController;
 var UserController = require('./UserController').UserController;
+var crypto = require('crypto');
 
 app.use(express.cookieParser());
 app.use(express.bodyParser());
@@ -49,8 +50,8 @@ passport.use(new LocalStrategy({
         }
       });
     });
-  });
-));
+  })
+);
 
 app.get('/', function(req, res) {
   res.sendfile('index.html');
@@ -125,7 +126,7 @@ function loggedIn(req, res, next) {
   } else {
     res.send(401, {});
   }
-};
+}
 
 app.listen(3000);
 console.log('Listening at 3000');
