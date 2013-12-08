@@ -58,6 +58,22 @@ UserController.prototype.findById = function(id, callback) {
   });
 };
 
+UserController.prototype.findOne = function(query, callback) {
+  this.getCollection(function(error, article_collection) {
+    if (error) {
+      callback(error);
+    } else {
+      article_collection.findOne(query, function(error, result) {
+        if (error) {
+          callback(error);
+        } else {
+          callback(null, result);
+        }
+      });
+    }
+  });
+});
+
 UserController.prototype.create = function(user, callback) {
   this.getCollection(function(error, article_collection) {
     article_collection.insert(user, callback(error))

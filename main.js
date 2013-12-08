@@ -33,20 +33,23 @@ passport.use(new LocalStrategy({
     usernameField: 'email',
     passwordField: 'password' //for completeness
   },
-  function(username, password, done) {
-    userController.getCollection(function(error, collection) {
-      collection.findOne({ email : username }, function(err, user) {
-        if (err) { return done(err); }
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username.' });
-        }
-        if (!password) {
+  function(email, password, done) {
+    userController.findOne({ email: email }, function(err, user) {
+      if (err) { return done(err); }
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      crypto.pbkdf2(password, user.salt, 10000, 512, function(err, derivedKey) {
+        password = derivedKey.toString('base64');
+        if (!user.password || user.password !== password) {
           return done(null, false, { message: 'Incorrect password.' });
         }
-        return done(null, user);
+        else {
+          return done(null, user[0]);
+        }
       });
     });
-  }
+  });
 ));
 
 app.get('/', function(req, res) {
