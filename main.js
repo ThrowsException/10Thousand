@@ -40,13 +40,13 @@ passport.use(new LocalStrategy({
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
-      crypto.pbkdf2(password, user.salt, 10000, 512, function(err, derivedKey) {
+      crypto.pbkdf2(password, user.salt.buffer, 10000, 512, function(err, derivedKey) {
         password = derivedKey.toString('base64');
         if (!user.password || user.password !== password) {
           return done(null, false, { message: 'Incorrect password.' });
         }
         else {
-          return done(null, user[0]);
+          return done(null, user);
         }
       });
     });
@@ -92,7 +92,7 @@ app.post('/achievement', loggedIn, function(req, res) {
   });
 });
 
-app.put('/user', loggedIn, function(req, res) {
+app.post('/user', function(req, res) {
   userController.create(req.body, function(error, result) {
     if(error) {
       res.send(error);

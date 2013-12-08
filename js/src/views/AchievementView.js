@@ -67,6 +67,7 @@ define(['underscore', 'backbone', 'marionette', 'highcharts', 'text!templates/Ac
 				}
 			}).fail(
         function(error){
+        	console.log(err);
           if(error.status === 401){
             Backbone.history.navigate('login', { trigger : true });
           }

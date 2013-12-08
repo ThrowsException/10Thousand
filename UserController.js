@@ -3,9 +3,9 @@ var Connection = require('mongodb').Connection;
 var Server = require('mongodb').Server;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
+var crypto = require('crypto');
 
 //Users look like { _id, Identity : [{ email : you@server.com, provider: facebook}, {email : you@server.com, provider: google}],}
-
 
 UserController = function(host, port) {
   this.db = new Db('node-ten-thousand', new Server(host, port, {
@@ -76,7 +76,15 @@ UserController.prototype.findOne = function(query, callback) {
 
 UserController.prototype.create = function(user, callback) {
   this.getCollection(function(error, article_collection) {
-    article_collection.insert(user, callback(error))
+
+    crypto.randomBytes(256, function(ex, buf) {
+      var salt = buf;
+      crypto.pbkdf2(user.password, salt, 10000, 512, function(err, derivedKey) {
+        user.password = derivedKey.toString('base64');
+        user.salt = salt;
+        article_collection.insert(user, callback(error));
+      });
+    });
   });
 };
 

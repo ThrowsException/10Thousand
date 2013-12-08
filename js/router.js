@@ -5,25 +5,27 @@ define([
    "views/AchievementView",
    "views/AchievementCollectionView",
    "views/LoginView",
+   "views/CreateAccountView",
    "collections/Achievements",
    "models/Achievement"
 ],
-function (Backbone, Marionette, app, AchievementView, AchievementCollectionView, LoginView, Achievements, Achievement){
+function (Backbone, Marionette, app, AchievementView, AchievementCollectionView, LoginView, CreateAccountView, Achievements, Achievement){
 
     "use strict";
 
     var AppRouter = Backbone.Marionette.AppRouter.extend({
 
         routes: {
-            "" : "home",
-            "achievementStats/:id" : "detail",
-            "login" : "login"
+          "" : "home",
+          "achievementStats/:id" : "detail",
+          "login" : "login",
+          "createAccount" : "createAccount"
         },
 
         home: function() {
           app.main.show(new AchievementCollectionView({
             collection: new Achievements()
-          }))
+          }));
         },
 
         detail: function(id) {
@@ -35,7 +37,11 @@ function (Backbone, Marionette, app, AchievementView, AchievementCollectionView,
         },
 
         login: function() {
-          app.main.show(new LoginView())
+          app.main.show(new LoginView());
+        },
+
+        createAccount: function() {
+          app.main.show(new CreateAccountView());
         }
     });
 
