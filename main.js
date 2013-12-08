@@ -98,7 +98,7 @@ app.post('/user', function(req, res) {
       res.send(error);
     }
     else {
-      res.send(result);
+      res.redirect('/#login');
     }
   });
 });
