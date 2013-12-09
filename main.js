@@ -1,3 +1,4 @@
+var http = require('http');
 var express = require('express');
 var fs = require('fs');
 var path = require('path');
@@ -8,14 +9,25 @@ var AchievementController = require('./AchievementController').AchievementContro
 var UserController = require('./UserController').UserController;
 var crypto = require('crypto');
 
+var routes = require('./routes');
+
+
+app.set('port', process.env.PORT || 3000);
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+app.use(express.favicon());
+app.use(express.logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded());
+app.use(express.methodOverride());
+app.use(app.router);
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(express.cookieParser());
 app.use(express.bodyParser());
-app.use(express.session({ secret: 'keyboard cat' }));
+app.use(express.session({ secret: 'tenthousandapp' }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(app.router);
-app.use(express.static(__dirname));
-
 
 var achievementController = new AchievementController('localhost', 27017);
 var userController = new UserController('localhost', 27017);
@@ -53,9 +65,7 @@ passport.use(new LocalStrategy({
   })
 );
 
-app.get('/', function(req, res) {
-  res.sendfile('index.html');
-});
+app.get('/', routes.index);
 
 app.get('/achievements', loggedIn, function(req, res) {
   achievementController.findAll(req.user._id, function(error, docs) {
@@ -128,6 +138,7 @@ function loggedIn(req, res, next) {
   }
 }
 
-app.listen(3000);
-console.log('Listening at 3000');
+http.createServer(app).listen(app.get('port'), function(){
+  console.log('Express server listening on port ' + app.get('port'));
+});
 
