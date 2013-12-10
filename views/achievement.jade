@@ -2,4 +2,44 @@ extends layout
 
 block content
 
-  h1 #{updates.name}
+  h1 Your Achievement Progress
+
+  #chart
+
+  script.
+    var achievement = !{JSON.stringify(achievement)};
+    var updates = achievement.updates;
+    var series = [];
+    var max = achievement.updates.length;
+    var totalHours = 0;
+    for(var i = 0; i < max; i++) {
+      if(updates[i]) {
+        var entry = updates[i];
+        totalHours = totalHours + entry[1];
+        series.push([entry[0], totalHours]);
+      }
+    }
+
+    this.chart = new Highcharts.Chart({
+      chart: {
+        renderTo: $("#chart")[0],
+        type: 'area'
+      },
+      title:{
+        text: achievement.name
+      },
+      xAxis: {
+        type: 'datetime',
+        tickInterval: 2 * 7 * 24 * 3600 * 1000, // two weeks
+        tickWidth: 0,
+        gridLineWidth: 1,
+        labels: {
+          align: 'left',
+          x: -15,
+          y: 10
+        }
+      },
+      series: [{
+        data: series
+      }]
+    });
