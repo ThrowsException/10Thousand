@@ -1,6 +1,8 @@
+extends layout
 
-ul 
-  each val in achievements
-    li
-      a(href='/achievements/#{val._id}')= val.name
-    
+block content
+  .container
+    ul.list-group
+      each val in achievements
+        li.list-group-item
+          a(href='/achievements/#{val._id}')= val.name

@@ -69,23 +69,7 @@ app.get('/', routes.index);
 
 app.get('/achievements', loggedIn, achievements.list);
 
-app.get('/achievementStats/:id', loggedIn, function(req, res) {
-  achievementController.findById(req.params.id, function(error, docs) {
-    //lets keep the updates array in order by date
-    if(docs && docs.updates){
-      docs.updates.sort(function(a, b) {
-        //guard against nulls or undefined in the array
-        if(a && b) {
-          return a[0] - b[0];
-        }
-      });
-      res.send(docs);
-    }
-    else {
-      res.send(docs);
-    }
-  });
-});
+app.get('/achievements/:id', loggedIn, achievements.detail);
 
 app.post('/achievement', loggedIn, function(req, res) {
   achievementController.create(req.body.name, req.user._id, function(error, result) {
