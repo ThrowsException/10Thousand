@@ -10,14 +10,12 @@ block content
     var achievement = !{JSON.stringify(achievement)};
     var updates = achievement.updates;
     var series = [];
-    var max = achievement.updates.length;
+    var max = updates.length;
     var totalHours = 0;
     for(var i = 0; i < max; i++) {
-      if(updates[i]) {
-        var entry = updates[i];
-        totalHours = totalHours + entry[1];
-        series.push([entry[0], totalHours]);
-      }
+      var entry = updates[i];
+      totalHours = totalHours + entry[1];
+      series.push([entry[0], totalHours]);
     }
 
     this.chart = new Highcharts.Chart({
