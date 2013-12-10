@@ -1,0 +1,6 @@
+
+ul 
+  each val in achievements
+    li
+      a(href='/achievements/#{val._id}')= val.name
+    

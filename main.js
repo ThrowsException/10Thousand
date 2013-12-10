@@ -10,7 +10,7 @@ var UserController = require('./UserController').UserController;
 var crypto = require('crypto');
 
 var routes = require('./routes');
-
+var achievements = require('./routes/achievements');
 
 app.set('port', process.env.PORT || 3000);
 app.set('views', path.join(__dirname, 'views'));
@@ -67,11 +67,7 @@ passport.use(new LocalStrategy({
 
 app.get('/', routes.index);
 
-app.get('/achievements', loggedIn, function(req, res) {
-  achievementController.findAll(req.user._id, function(error, docs) {
-    res.send(docs);
-  });
-});
+app.get('/achievements', loggedIn, achievements.list);
 
 app.get('/achievementStats/:id', loggedIn, function(req, res) {
   achievementController.findById(req.params.id, function(error, docs) {
