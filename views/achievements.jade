@@ -6,3 +6,20 @@ block content
       each val in achievements
         li.list-group-item
           a(href='/achievements/#{val._id}')= val.name
+
+    input(type="text" id="newAchievement" placeholder="Achievement")
+    input(type="button" id="add" value="Add")
+
+  script.
+    function add () {
+      var data = {}
+      data.name = $('#newAchievement').val();
+
+      $.ajax({
+        type: "POST",
+        url: "/achievement",
+        data: data
+      });
+    }
+
+    $("#add").click(add);

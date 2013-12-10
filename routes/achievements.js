@@ -25,7 +25,7 @@ exports.detail = function(req, res){
       res.render('achievement', { achievement : data });
     }
     else {
-      es.render('achievement', { achievement : data });
+      res.render('achievement', { achievement : data });
     }
   });
 };
