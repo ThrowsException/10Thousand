@@ -47,3 +47,16 @@ block content
         data: series
       }]
     });
+
+    function update() {
+      $.ajax({
+        url: "/achievementStats/" + achievement._id,
+        method: "PUT",
+        data: {
+          date: Date.parse($("#input-date").val() + ' UTC'),
+          hours: $("#input-hours").val()
+        }
+      });    
+    }
+
+    $('#submit').click(update);
