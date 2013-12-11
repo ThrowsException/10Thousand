@@ -29,3 +29,14 @@ exports.detail = function(req, res){
     }
   });
 };
+
+exports.put = function(req, res){
+  var update = [];
+  update.push(Number(req.body.date), Number(req.body.hours));
+  achievementController.save({
+    id: req.params.id,
+    update: update
+  }, function(error, result) {
+    res.json(result);
+  });
+};

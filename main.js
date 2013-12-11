@@ -71,6 +71,8 @@ app.get('/achievements', loggedIn, achievements.list);
 
 app.get('/achievements/:id', loggedIn, achievements.detail);
 
+app.put('/achievementStats/:id', loggedIn, achievements.put)
+
 app.post('/achievement', loggedIn, function(req, res) {
   achievementController.create(req.body.name, req.user._id, function(error, result) {
     if(error) {
@@ -99,22 +101,11 @@ app.post('/login',
                                    failureFlash: false })
 );
 
-app.put('/achievementStats/:id', loggedIn, function(req, res) {
-  var update = [];
-  update.push(Number(req.body.date), Number(req.body.hours));
-  achievementController.save({
-    id: req.params.id,
-    update: update
-  }, function(error, result) {
-    res.send(result);
-  });
-});
-
 function loggedIn(req, res, next) {
   if (req.user) {
     next();
   } else {
-    res.send(401, {});
+    res.redirect('/');
   }
 }
 

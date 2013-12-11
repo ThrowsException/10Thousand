@@ -15,8 +15,9 @@ block content
   script.
     var achievement = !{JSON.stringify(achievement)};
     var updates = achievement.updates;
+    var chart = {}; 
+    var series = [];
     if(updates) {
-      var series = [];
       var max = updates.length;
       var totalHours = 0;
       for(var i = 0; i < max; i++) {
@@ -25,7 +26,7 @@ block content
         series.push([entry[0], totalHours]);
       }
 
-      this.chart = new Highcharts.Chart({
+      chart = new Highcharts.Chart({
         chart: {
           renderTo: $("#chart")[0],
           type: 'area'
@@ -54,10 +55,31 @@ block content
       $.ajax({
         url: "/achievementStats/" + achievement._id,
         method: "PUT",
+        beforeSend: chart.showLoading(),
         data: {
           date: Date.parse($("#input-date").val() + ' UTC'),
           hours: $("#input-hours").val()
         }
+      })
+      .done(function(data) {
+        totalHours = 0;
+        updates.push(data);
+        updates.sort(function(a, b) {
+          //guard against nulls or undefined in the array
+          if(a && b) {
+            return a[0] - b[0];
+          }
+        });
+        var newSeries = [];
+        for(var i = 0; i < updates.length; i++) {
+          var entry = updates[i];
+          totalHours = totalHours + entry[1];
+          newSeries.push([entry[0], totalHours]);
+        }
+        chart.series[0].setData(newSeries);
+      })
+      .always(function() { 
+        chart.hideLoading() 
       });    
     }
 

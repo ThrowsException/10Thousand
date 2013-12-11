@@ -66,7 +66,7 @@ AchievementController.prototype.save = function(goalUpdate, callback) {
     article_collection.update({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(goalUpdate.id) },
       { $push: { updates: goalUpdate.update } },
       {upsert: true, w:1 }, function(error, result) {
-        callback(error, result);
+        callback(error, goalUpdate.update);
     });
   });
 };
