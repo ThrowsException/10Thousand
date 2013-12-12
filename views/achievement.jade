@@ -51,6 +51,27 @@ block content
       });
     }
 
+    function sortUpdates() {
+      totalHours = 0;
+      updates.sort(function(a, b) {
+        //guard against nulls or undefined in the array
+        if(a && b) {
+          return a[0] - b[0];
+        }
+      });
+    }
+
+    function sumUpdates() {
+      var newSeries = [];
+      for(var i = 0; i < updates.length; i++) {
+        var entry = updates[i];
+        totalHours = totalHours + entry[1];
+        newSeries.push([entry[0], totalHours]);
+      }
+
+      return newSeries;
+    }
+
     function update() {
       $.ajax({
         url: "/achievementStats/" + achievement._id,
@@ -64,19 +85,8 @@ block content
       .done(function(data) {
         totalHours = 0;
         updates.push(data);
-        updates.sort(function(a, b) {
-          //guard against nulls or undefined in the array
-          if(a && b) {
-            return a[0] - b[0];
-          }
-        });
-        var newSeries = [];
-        for(var i = 0; i < updates.length; i++) {
-          var entry = updates[i];
-          totalHours = totalHours + entry[1];
-          newSeries.push([entry[0], totalHours]);
-        }
-        chart.series[0].setData(newSeries);
+        sortUpdates();
+        chart.series[0].setData(sumUpdates());
       })
       .always(function() { 
         chart.hideLoading() 
