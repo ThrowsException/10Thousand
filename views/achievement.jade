@@ -14,8 +14,8 @@ block content
 
   script.
     var achievement = !{JSON.stringify(achievement)};
-    var updates = achievement.updates;
-    var chart = {}; 
+    var updates = achievement.updates || [];
+    var chart = {};
     var series = [];
     if(updates) {
       var max = updates.length;
@@ -76,7 +76,7 @@ block content
       $.ajax({
         url: "/achievementStats/" + achievement._id,
         method: "PUT",
-        beforeSend: chart.showLoading(),
+        beforeSend: function() { if(chart.showLoading === 'function') { chart.showLoading(); } },
         data: {
           date: Date.parse($("#input-date").val() + ' UTC'),
           hours: $("#input-hours").val()
