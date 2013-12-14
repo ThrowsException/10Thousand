@@ -55,7 +55,7 @@ passport.use(new LocalStrategy({
       if (!user) {
         return done(null, false, { message: 'Incorrect username.' });
       }
-      crypto.pbkdf2(password, user.salt.buffer, 1, 64, function(err, derivedKey) {
+      crypto.pbkdf2(password, user.salt.buffer, 10000, 512, function(err, derivedKey) {
         password = derivedKey.toString('base64');
         if (!user.password || user.password !== password) {
           return done(null, false, { message: 'Incorrect password.' });
