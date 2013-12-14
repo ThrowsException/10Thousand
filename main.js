@@ -31,9 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
-  'localhost';
-
-process.stdout.write(mongoUri);
+  'mongodb://localhost:27017/node-ten-thousand';
 
 var userController = new UserController(mongoUri, 27017);
 

@@ -1,18 +1,17 @@
-var Db = require('mongodb').Db;
-var Connection = require('mongodb').Connection;
-var Server = require('mongodb').Server;
+var MongoClient = require('mongodb').MongoClient;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 
-AchievementController = function(host, port) {
-  this.db = new Db('node-ten-thousand', new Server(host, port, {
-    auto_reconnect: true
-  }, {}));
-  this.db.open(function() {});
+var db;
+
+AchievementController = function(connectionString) {
+  MongoClient.connect(connectionString, function(err, database) {
+    db = database;
+  });
 };
 
 AchievementController.prototype.getCollection = function(callback) {
-  this.db.collection('achievements', function(error, article_collection) {
+  db.collection('achievements', function(error, article_collection) {
     if (error) {
       callback(error);
     } else {
@@ -57,7 +56,7 @@ AchievementController.prototype.findById = function(id, callback) {
 
 AchievementController.prototype.create = function(achievement, user, callback) {
   this.getCollection(function(error, article_collection) {
-    article_collection.save({ name : achievement, user : user }, callback(error))
+    article_collection.save({ name : achievement, user : user }, callback);
   });
 };
 

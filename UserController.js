@@ -1,21 +1,18 @@
-var Db = require('mongodb').Db;
-var Connection = require('mongodb').Connection;
-var Server = require('mongodb').Server;
-var BSON = require('mongodb').BSON;
+var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 var crypto = require('crypto');
 
 //Users look like { _id, Identity : [{ email : you@server.com, provider: facebook}, {email : you@server.com, provider: google}],}
+var db; 
 
-UserController = function(host, port) {
-  this.db = new Db('node-ten-thousand', new Server(host, port, {
-    auto_reconnect: true
-  }, {}));
-  this.db.open(function() {});
+UserController = function(connectionString) {
+  MongoClient.connect(connectionString, function(err, database) {
+    db = database;
+  });
 };
 
 UserController.prototype.getCollection = function(callback) {
-  this.db.collection('users', function(error, article_collection) {
+  db.collection('users', function(error, article_collection) {
     if (error) {
       callback(error);
     } else {
@@ -81,7 +78,7 @@ UserController.prototype.create = function(user, callback) {
       crypto.pbkdf2(user.password, salt, 1, 64, function(err, derivedKey) {
         user.password = derivedKey.toString('base64');
         user.salt = salt;
-        article_collection.insert(user, callback(error));
+        article_collection.insert(user, callback);
       });
     });
   });

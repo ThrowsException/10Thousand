@@ -2,7 +2,7 @@ var UserController = require('../UserController').UserController;
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
-  'localhost';
+  'mongodb://localhost:27017/node-ten-thousand';
 
 process.stdout.write(mongoUri);
 var userController = new UserController(mongoUri, 27017);
@@ -17,7 +17,6 @@ exports.create = function(req, res) {
       res.send(error);
     }
     else {
-      process.stdout.write(JSON.stringify(result));
       res.redirect('/');
     }
   });

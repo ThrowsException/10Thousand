@@ -6,7 +6,7 @@ var AchievementController = require('../AchievementController').AchievementContr
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
-  'localhost';
+  'mongodb://localhost:27017/node-ten-thousand';
 
 var achievementController = new AchievementController(mongoUri, 27017);
 
