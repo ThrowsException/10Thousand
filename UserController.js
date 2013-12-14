@@ -81,7 +81,7 @@ UserController.prototype.create = function(user, callback) {
       crypto.pbkdf2(user.password, salt, 1, 64, function(err, derivedKey) {
         user.password = derivedKey.toString('base64');
         user.salt = salt;
-        article_collection.insert(user, callback(error, docs));
+        article_collection.insert(user, callback(error));
       });
     });
   });
