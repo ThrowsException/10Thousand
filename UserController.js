@@ -76,9 +76,9 @@ UserController.prototype.findOne = function(query, callback) {
 
 UserController.prototype.create = function(user, callback) {
   this.getCollection(function(error, article_collection) {
-    crypto.randomBytes(256, function(ex, buf) {
+    crypto.randomBytes(16, function(ex, buf) {
       var salt = buf;
-      crypto.pbkdf2(user.password, salt, 1, 512, function(err, derivedKey) {
+      crypto.pbkdf2(user.password, salt, 1, 64, function(err, derivedKey) {
         user.password = derivedKey.toString('base64');
         user.salt = salt;
         article_collection.insert(user, callback(error));
