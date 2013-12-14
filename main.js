@@ -29,8 +29,11 @@ app.use(passport.session());
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
-var achievementController = new AchievementController('localhost', 27017);
-var userController = new UserController('localhost', 27017);
+var mongoUri = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+  'localhost';
+
+var userController = new UserController(mongoUri, 27017);
 
 passport.serializeUser(function(user, done) {
   done(null, user._id);
@@ -75,16 +78,7 @@ app.get('/signup', users.signup);
 
 app.put('/achievementStats/:id', loggedIn, achievements.put)
 
-app.post('/achievement', loggedIn, function(req, res) {
-  achievementController.create(req.body.name, req.user._id, function(error, result) {
-    if(error) {
-      res.send(error);
-    }
-    else {
-      res.send(result);
-    }
-  });
-});
+app.post('/achievement', loggedIn, achievements.create);
 
 app.post('/user', users.create);
 

@@ -4,15 +4,19 @@
  */
 var AchievementController = require('../AchievementController').AchievementController;
 
-var achievementController = new AchievementController('localhost', 27017);
+var mongoUri = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+  'localhost';
 
-exports.list = function(req, res){
+var achievementController = new AchievementController(mongoUri, 27017);
+
+exports.list = function(req, res) {
   achievementController.findAll(req.user._id, function(error, data) {
     res.render('achievements', { achievements : data });
   });
 };
 
-exports.detail = function(req, res){
+exports.detail = function(req, res) {
   achievementController.findById(req.params.id, function(error, data) {
     //lets keep the updates array in order by date
     if(data && data.updates){
@@ -30,7 +34,18 @@ exports.detail = function(req, res){
   });
 };
 
-exports.put = function(req, res){
+exports.create = function(req, res) {
+  achievementController.create(req.body.name, req.user._id, function(error, result) {
+    if(error) {
+      res.send(error);
+    }
+    else {
+      res.send(result);
+    }
+  });
+};
+
+exports.put = function(req, res) {
   var update = [];
   update.push(Number(req.body.date), Number(req.body.hours));
   achievementController.save({

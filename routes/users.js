@@ -1,6 +1,10 @@
 var UserController = require('../UserController').UserController;
 
-var userController = new UserController('localhost', 27017);
+var mongoUri = process.env.MONGOLAB_URI ||
+  process.env.MONGOHQ_URL ||
+  'localhost';
+
+var userController = new UserController(mongoUri, 27017);
 
 exports.signup = function(req, res){
   res.render('signup');
