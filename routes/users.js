@@ -14,11 +14,10 @@ exports.signup = function(req, res) {
 exports.create = function(req, res) {
   userController.create(req.body, function(error, result) {
     if(error) {
-      process.stdout.write(error);
       res.send(error);
     }
     else {
-      process.stdout.write(result);
+      process.stdout.write(JSON.stringify(result));
       res.redirect('/');
     }
   });
