@@ -31,9 +31,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
-  'localhost';
+  'mongodb://localhost:27017/node-ten-thousand';
 
-var userController = new UserController(mongoUri, 27017);
+var userController = new UserController(mongoUri);
 
 passport.serializeUser(function(user, done) {
   done(null, user._id);

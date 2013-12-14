@@ -1,24 +1,15 @@
-var Db = require('mongodb').Db;
-var Connection = require('mongodb').Connection;
-var Server = require('mongodb').Server;
+var MongoClient = require('mongodb').MongoClient;
 var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
-
-AchievementController = function(host, port) {
-  this.db = new Db('node-ten-thousand', new Server(host, port, {
-    auto_reconnect: true
-  }, {}));
-  this.db.open(function() {});
+var db;
+AchievementController = function(connectionString) {
+  MongoClient.connect(connectionString, function(err, database){
+    db = database;
+  });
 };
 
 AchievementController.prototype.getCollection = function(callback) {
-  this.db.collection('achievements', function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      callback(null, article_collection);
-    }
-  });
+  db.collection('achievements', callback);
 };
 
 AchievementController.prototype.findAll = function(user, callback) {
@@ -26,13 +17,7 @@ AchievementController.prototype.findAll = function(user, callback) {
     if (error) {
       callback(error);
     } else {
-      article_collection.find({ user : user }).toArray(function(error, results) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(null, results);
-        }
-      });
+      article_collection.find({ user : user }).toArray(callback);
     }
   });
 };
@@ -44,20 +29,14 @@ AchievementController.prototype.findById = function(id, callback) {
     } else {
       article_collection.findOne({
         _id: article_collection.db.bson_serializer.ObjectID.createFromHexString(id)
-      }, function(error, result) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(null, result);
-        }
-      });
+      }, callback);
     }
   });
 };
 
 AchievementController.prototype.create = function(achievement, user, callback) {
   this.getCollection(function(error, article_collection) {
-    article_collection.save({ name : achievement, user : user }, callback(error))
+    article_collection.save({ name : achievement, user : user }, callback)
   });
 };
 
