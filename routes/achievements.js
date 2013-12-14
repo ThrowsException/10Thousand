@@ -8,7 +8,7 @@ var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
   'mongodb://localhost:27017/node-ten-thousand';
 
-var achievementController = new AchievementController(mongoUri, 27017);
+var achievementController = new AchievementController(mongoUri);
 
 exports.list = function(req, res) {
   achievementController.findAll(req.user._id, function(error, data) {

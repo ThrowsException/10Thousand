@@ -5,19 +5,13 @@ var ObjectID = require('mongodb').ObjectID;
 var db;
 
 AchievementController = function(connectionString) {
-  MongoClient.connect(connectionString, function(err, database) {
+  MongoClient.connect(connectionString, function(err, database){
     db = database;
   });
 };
 
 AchievementController.prototype.getCollection = function(callback) {
-  db.collection('achievements', function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      callback(null, article_collection);
-    }
-  });
+  db.collection('achievements', callback);
 };
 
 AchievementController.prototype.findAll = function(user, callback) {
@@ -25,13 +19,7 @@ AchievementController.prototype.findAll = function(user, callback) {
     if (error) {
       callback(error);
     } else {
-      article_collection.find({ user : user }).toArray(function(error, results) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(null, results);
-        }
-      });
+      article_collection.find({ user : user }).toArray(callback);
     }
   });
 };
@@ -43,13 +31,7 @@ AchievementController.prototype.findById = function(id, callback) {
     } else {
       article_collection.findOne({
         _id: article_collection.db.bson_serializer.ObjectID.createFromHexString(id)
-      }, function(error, result) {
-        if (error) {
-          callback(error);
-        } else {
-          callback(null, result);
-        }
-      });
+      }, callback);
     }
   });
 };

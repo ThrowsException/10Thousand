@@ -4,8 +4,12 @@ var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||
   'mongodb://localhost:27017/node-ten-thousand';
 
+<<<<<<< HEAD
 process.stdout.write(mongoUri);
 var userController = new UserController(mongoUri, 27017);
+=======
+var userController = new UserController(mongoUri);
+>>>>>>> master
 
 exports.signup = function(req, res) {
   res.render('signup');
