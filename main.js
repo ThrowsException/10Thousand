@@ -84,7 +84,7 @@ app.post('/user', users.create);
 
 app.post('/login',
   passport.authenticate('local', { successRedirect: '/achievements',
-                                   failureRedirect: '/login',
+                                   failureRedirect: '/',
                                    failureFlash: false })
 );
 
