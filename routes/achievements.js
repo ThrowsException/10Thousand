@@ -2,7 +2,7 @@
 /*
  * GET users listing.
  */
-var AchievementController = require('../AchievementController').AchievementController;
+var AchievementController = require('../app/controllers/achievements').AchievementController;
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||

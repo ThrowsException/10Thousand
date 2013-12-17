@@ -1,4 +1,4 @@
-var UserController = require('../UserController').UserController;
+var UserController = require('../app/controllers/users').UserController;
 
 var mongoUri = process.env.MONGOLAB_URI ||
   process.env.MONGOHQ_URL ||

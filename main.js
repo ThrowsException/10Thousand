@@ -5,8 +5,8 @@ var path = require('path');
 var app = express();
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
-var AchievementController = require('./AchievementController').AchievementController;
-var UserController = require('./UserController').UserController;
+var AchievementController = require('./app/controllers/achievements').AchievementController;
+var UserController = require('./app/controllers/users').UserController;
 var crypto = require('crypto');
 
 var routes = require('./routes');
