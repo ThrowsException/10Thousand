@@ -1,13 +1,13 @@
 extends layout
 
 block content
-    ul.list-group
-      each val in achievements
-        li.list-group-item
-          a(href='/achievements/#{val._id}')= val.name
+  ul.list-group
+    each val in achievements
+      li.list-group-item
+        a(href='/achievements/#{val._id}')= val.name
 
-    input(type="text" id="newAchievement" placeholder="Achievement")
-    input(type="button" id="add" value="Add")
+  input(type="text" id="newAchievement" placeholder="Achievement")
+  input(type="button" id="add" value="Add")
 
   script.
     function add () {
@@ -18,6 +18,9 @@ block content
         type: "POST",
         url: "/achievement",
         data: data
+      }).
+      done(function(data) {
+        window.location = '/achievements/' + data._id;
       });
     }
 
