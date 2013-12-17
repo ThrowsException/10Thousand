@@ -1,11 +1,9 @@
 extends layout
 
 block content
-  div.container
-    h1 Login
-    
+  div#content
+    h2 Login
     form(action='login' role='form' method='POST')
-      
       div.form-group
         input#email.form-control(placeholder='Email' name="email")
       div.form-group
