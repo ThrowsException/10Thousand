@@ -1,5 +1,4 @@
 var MongoClient = require('mongodb').MongoClient;
-var BSON = require('mongodb').BSON;
 var ObjectID = require('mongodb').ObjectID;
 var crypto = require('crypto');
 
@@ -32,9 +31,7 @@ UserController.prototype.findById = function(id, callback) {
     if (error) {
       callback(error);
     } else {
-      article_collection.findOne({
-        _id: article_collection.db.bson_serializer.ObjectID.createFromHexString(id)
-      }, callback);
+      article_collection.findOne({ _id: new ObjectID(id) }, callback);
     }
   });
 };
@@ -59,14 +56,6 @@ UserController.prototype.create = function(user, callback) {
         article_collection.insert(user, callback);
       });
     });
-  });
-};
-
-UserController.prototype.save = function(identity, user, callback) {
-  this.getCollection(function(error, article_collection) {
-    article_collection.update({_id: article_collection.db.bson_serializer.ObjectID.createFromHexString(goalUpdate.id) },
-      { $push: { Identities: identity } },
-      {upsert: true, w:1 }, callback);
   });
 };
 
