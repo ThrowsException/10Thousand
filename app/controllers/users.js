@@ -16,26 +16,6 @@ UserController.prototype.getCollection = function(callback) {
   db.collection('users', callback);
 };
 
-UserController.prototype.findAll = function(callback) {
-  this.getCollection(function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      article_collection.find().toArray(callback);
-    }
-  });
-};
-
-UserController.prototype.findById = function(id, callback) {
-  this.getCollection(function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      article_collection.findOne({ _id: new ObjectID(id) }, callback);
-    }
-  });
-};
-
 UserController.prototype.findOne = function(query, callback) {
   this.getCollection(function(error, article_collection) {
     if (error) {

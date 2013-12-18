@@ -36,11 +36,11 @@ var mongoUri = process.env.MONGOLAB_URI ||
 var userController = new UserController(mongoUri);
 
 passport.serializeUser(function(user, done) {
-  done(null, user._id);
+  done(null, user.email);
 });
 
-passport.deserializeUser(function(_id, done) {
-  userController.findById(_id, function(err, user) {
+passport.deserializeUser(function(email, done) {
+  userController.findOne({ email: email }, function(err, user) {
     done(err, user);
   });
 });
