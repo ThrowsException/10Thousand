@@ -68,7 +68,7 @@ passport.use(new LocalStrategy({
   })
 );
 
-app.get('/', routes.index);
+app.get('/', showAcheivementsIfAuth, routes.index);
 
 app.get('/achievements', loggedIn, achievements.list);
 
@@ -93,6 +93,14 @@ function loggedIn(req, res, next) {
     next();
   } else {
     res.redirect('/');
+  }
+}
+
+function showAcheivementsIfAuth(req, res, next) {
+  if (req.user) {
+    res.redirect('/achievements');
+  } else {
+    next();
   }
 }
 
