@@ -1,52 +1,50 @@
-var MongoClient = require('mongodb').MongoClient;
-var ObjectID = require('mongodb').ObjectID;
+var mongoose = require('mongoose'),
+    Achievement = mongoose.model('Achievement'),
+    Update = mongoose.model('Update');
 
-var db;
-
-AchievementController = function(connectionString) {
-  MongoClient.connect(connectionString, function(err, database){
-    db = database;
+exports.list = function(req, res) {
+  Achievement.find({ user: req.user._id }, function(error, data) {
+    res.render('achievements', { achievements : data });
   });
 };
 
-AchievementController.prototype.getCollection = function(callback) {
-  db.collection('achievements', callback);
-};
-
-AchievementController.prototype.findAll = function(user, callback) {
-  this.getCollection(function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      article_collection.find({ user : user }).toArray(callback);
+exports.detail = function(req, res) {
+  Achievement.findById(req.params.id , function(error, data) {
+    //lets keep the updates array in order by date
+    console.log(data);
+    if(data && data.updates){
+      data.updates.sort(function(a, b) {
+        //guard against nulls or undefined in the array
+        if(a && b) {
+          return a.time_ms - b.time_ms;
+        }
+      });
+      res.render('achievement', { achievement : data });
+    }
+    else {
+      res.render('achievement', { achievement : data });
     }
   });
 };
 
-AchievementController.prototype.findById = function(id, callback) {
-  this.getCollection(function(error, article_collection) {
-    if (error) {
-      callback(error);
-    } else {
-      article_collection.findOne({ _id: new ObjectID(id) }, callback);
+exports.create = function(req, res) {
+  var achievement = new Achievement(req.body)
+  Achievement.create({name: req.body.name, user: req.user._id}, function(error, result) {
+    if(error) {
+      res.send(error);
+    }
+    else {
+      res.send(result);
     }
   });
 };
 
-AchievementController.prototype.create = function(achievement, user, callback) {
-  this.getCollection(function(error, article_collection) {
-    article_collection.save({ name : achievement, user : user }, callback);
-  });
-};
-
-AchievementController.prototype.save = function(goalUpdate, callback) {
-  this.getCollection(function(error, article_collection) {
-    article_collection.update({_id: new ObjectID(goalUpdate.id) },
-      { $push: { updates: goalUpdate.update } },
-      {upsert: true, w:1 }, function(error, result) {
-        callback(error, goalUpdate.update);
+exports.put = function(req, res) {
+  var update = new Update(req.body);
+  Achievement.findById(req.params.id, function(error, data) {
+    data.updates.push(update);
+    data.save(function(err, data, numberAffected){
+      res.json(data);
     });
   });
 };
-
-exports.AchievementController = AchievementController;
