@@ -1,4 +1,5 @@
-10Thousand
+#10Thousand
+
 Track your achievements.
 
 Malcolm gladwell stresses the 10,000 hour rule where he proposes that it takes 10,000 hours of practice to become an expert in something. Counting and tracking 10,000 hours takes a long time, so lets make it fun with an app.
