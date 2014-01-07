@@ -1,0 +1,31 @@
+<section data-ng-controller="AchievementsController" data-ng-init="findOne()">
+    <h2>{{achievement.name}}</h2>
+    <!-- <div data-ng-show="global.user._id == achievement.user">
+        <a class="btn" href="/#!/achievements/{{achievement._id}}/edit">
+        	<i class="icon-edit"></i>
+        </a> 
+        <a class="btn" data-ng-click="remove();">
+            <i class="icon-trash"></i>
+        </a>
+    </div> -->
+    <div id="chart"></div>
+    <form class="form-horizontal" data-ng-submit="sendUpdate()">
+        <div class="control-group">
+            <label class="control-label" for="date">Date</label>
+            <div class="controls">
+                <input type="date" id="date" required>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="hours">Hours</label>
+            <div class="controls">
+                <input type="number" id="hours" required>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" class="btn">
+            </div>
+        </div>
+    </form>
+</section>

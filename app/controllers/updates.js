@@ -9,7 +9,7 @@ exports.create = function(req, res) {
     update.save(function(err){
       achievement.updates.push(update);
       achievement.save();
-      res.send(update);
+      res.jsonp(update);
     });
   });
 };
