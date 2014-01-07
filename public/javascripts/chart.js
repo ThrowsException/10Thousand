@@ -49,6 +49,16 @@ function sumUpdates() {
   return newSeries;
 }
 
+function sortUpdates() {
+  totalHours = 0;
+  updates.sort(function(a, b) {
+    //guard against nulls or undefined in the array
+    if(a && b) {
+      return a.time_ms - b.time_ms;
+    }
+  });
+}
+
 function update() {
   $.ajax({
     url: "/update/" + achievement._id,
@@ -62,6 +72,7 @@ function update() {
   .done(function(data) {
     totalHours = 0;
     updates.push(data);
+    sortUpdates()
     chart.series[0].setData(sumUpdates());
   })
   .always(function() { 
