@@ -69,8 +69,10 @@ var achievements = require('./app/controllers/achievements');
 app.get('/', showAcheivementsIfAuth, routes.index);
 app.get('/achievements', loggedIn, achievements.list);
 app.get('/achievements/:id', loggedIn, achievements.detail);
-app.put('/achievementStats/:id', loggedIn, achievements.put)
 app.post('/achievement', loggedIn, achievements.create);
+
+var updates = require('./app/controllers/updates');
+app.post('/update/:id', loggedIn, updates.create);
 
 
 var users = require('./app/controllers/users');

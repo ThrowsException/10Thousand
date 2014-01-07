@@ -9,11 +9,8 @@ exports.list = function(req, res) {
 };
 
 exports.detail = function(req, res) {
-  Achievement.findById(req.params.id , function(error, achievement) {
-    Update.find({ acheivement_id : req.params.id }, function(error, updates) {
-      achievements.updates = updates;
-       res.render('achievement', { achievement : achievements });
-    });
+  Achievement.findById(req.params.id).populate({ path: "updates", options: { sort: {date: 1 }}}).exec(function(error, achievement) {
+    res.render('achievement', { achievement : achievement });
   });
 };
 
@@ -25,15 +22,5 @@ exports.create = function(req, res) {
     else {
       res.send(result);
     }
-  });
-};
-
-exports.put = function(req, res) {
-  var update = new Update(req.body);
-  Achievement.findById(req.params.id, function(error, data) {
-    data.updates.push(update);
-    data.save(function(err, data, numberAffected){
-      res.json(data);
-    });
   });
 };

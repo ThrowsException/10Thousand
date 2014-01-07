@@ -6,7 +6,8 @@ var mongoose = require('mongoose'),
  */
 var UpdateSchema = new Schema({
   date: {
-      type: Date
+      type: Date,
+      default: new Date()
   },
   hours: {
       type: Number
@@ -22,3 +23,5 @@ UpdateSchema.virtual('time_ms').get(function () {
 
 UpdateSchema.set('toObject', { getters: true, virtuals: true });
 UpdateSchema.set('toJSON', { getters: true, virtuals: true });
+
+mongoose.model('Update', UpdateSchema);
