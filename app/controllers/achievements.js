@@ -9,26 +9,15 @@ exports.list = function(req, res) {
 };
 
 exports.detail = function(req, res) {
-  Achievement.findById(req.params.id , function(error, data) {
-    //lets keep the updates array in order by date
-    console.log(data);
-    if(data && data.updates){
-      data.updates.sort(function(a, b) {
-        //guard against nulls or undefined in the array
-        if(a && b) {
-          return a.time_ms - b.time_ms;
-        }
-      });
-      res.render('achievement', { achievement : data });
-    }
-    else {
-      res.render('achievement', { achievement : data });
-    }
+  Achievement.findById(req.params.id , function(error, achievement) {
+    Update.find({ acheivement_id : req.params.id }, function(error, updates) {
+      achievements.updates = updates;
+       res.render('achievement', { achievement : achievements });
+    });
   });
 };
 
 exports.create = function(req, res) {
-  var achievement = new Achievement(req.body)
   Achievement.create({name: req.body.name, user: req.user._id}, function(error, result) {
     if(error) {
       res.send(error);
