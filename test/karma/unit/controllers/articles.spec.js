@@ -4,7 +4,7 @@
     // Articles Controller Spec
     describe('MEAN controllers', function() {
 
-        describe('ArticlesController', function() {
+        describe('AchievementsController', function() {
 
             // The $resource service augments the response object with methods for updating and deleting the resource.
             // If we were to use the standard toEqual matcher, our tests would fail because the test values would not match
@@ -36,7 +36,7 @@
 
                 scope = $rootScope.$new();
 
-                ArticlesController = $controller('ArticlesController', {
+                ArticlesController = $controller('AchievementsController', {
                     $scope: scope
                 });
 
@@ -48,11 +48,11 @@
 
             }));
 
-            it('$scope.find() should create an array with at least one article object ' +
+            it('$scope.find() should create an array with at least one achievement object ' +
                 'fetched from XHR', function() {
 
                     // test expected GET request
-                    $httpBackend.expectGET('articles').respond([{
+                    $httpBackend.expectGET('achievements?').respond([{
                         title: 'An Article about MEAN',
                         content: 'MEAN rocks!'
                     }]);
@@ -62,17 +62,17 @@
                     $httpBackend.flush();
 
                     // test scope value
-                    expect(scope.articles).toEqualData([{
+                    expect(scope.achievements).toEqualData([{
                         title: 'An Article about MEAN',
                         content: 'MEAN rocks!'
                     }]);
 
                 });
 
-            it('$scope.findOne() should create an array with one article object fetched ' +
-                'from XHR using a articleId URL parameter', function() {
+            it('$scope.findOne() should create an array with one achievement object fetched ' +
+                'from XHR using a achievementId URL parameter', function() {
                     // fixture URL parament
-                    $routeParams.articleId = '525a8422f6d0f87f0e407a33';
+                    $routeParams.achievementId = '525a8422f6d0f87f0e407a33';
 
                     // fixture response object
                     var testArticleData = function() {
@@ -83,14 +83,15 @@
                     };
 
                     // test expected GET request with response object
-                    $httpBackend.expectGET(/articles\/([0-9a-fA-F]{24})$/).respond(testArticleData());
+                    //$httpBackend.expectGET(/achievements\/([0-9a-fA-F]{24})$/).respond(testArticleData());
+                    $httpBackend.expectGET('achievements/525a8422f6d0f87f0e407a33?').respond(testArticleData());
 
                     // run controller
                     scope.findOne();
                     $httpBackend.flush();
 
                     // test scope value
-                    expect(scope.article).toEqualData(testArticleData());
+                    expect(scope.achievement).toEqualData(testArticleData());
 
                 });
 
@@ -101,8 +102,7 @@
                     // fixture expected POST data
                     var postArticleData = function() {
                         return {
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            name: 'An Article about MEAN'
                         };
                     };
 
@@ -110,28 +110,25 @@
                     var responseArticleData = function() {
                         return {
                             _id: '525cf20451979dea2c000001',
-                            title: 'An Article about MEAN',
-                            content: 'MEAN rocks!'
+                            name: 'An Article about MEAN'
                         };
                     };
 
                     // fixture mock form input values
-                    scope.title = 'An Article about MEAN';
-                    scope.content = 'MEAN rocks!';
+                    scope.name = 'An Article about MEAN';
 
                     // test post request is sent
-                    $httpBackend.expectPOST('articles', postArticleData()).respond(responseArticleData());
+                    $httpBackend.expectPOST('achievements?', postArticleData()).respond(responseArticleData());
 
                     // Run controller
                     scope.create();
                     $httpBackend.flush();
 
                     // test form input(s) are reset
-                    expect(scope.title).toEqual('');
-                    expect(scope.content).toEqual('');
+                    expect(scope.name).toEqual('');
 
                     // test URL location to new object
-                    expect($location.path()).toBe('/articles/' + responseArticleData()._id);
+                    expect($location.path()).toBe('/achievements/' + responseArticleData()._id);
                 });
 
             it('$scope.update() should update a valid article', inject(function(Articles) {

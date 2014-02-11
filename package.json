@@ -1,12 +1,12 @@
 {
     "name": "mean",
-    "description": "MEAN - A Modern Stack: MongoDB, ExpressJS, AngularJS, NodeJS. (BONUS: Passport User Support).",
-    "version": "0.1.0",
+    "description": "10000 share your expertise",
+    "version": "0.5.0",
     "private": false,
     "author": "Amos Haviv",
     "repository": {
         "type": "git",
-        "url": "https://github.com/linnovate/mean.git"
+        "url": "https://github.com/ThrowsException/ten-thousand.git"
     },
     "engines": {
         "node": "0.10.x",
