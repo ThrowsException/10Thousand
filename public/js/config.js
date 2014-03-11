@@ -15,7 +15,7 @@ angular.module('mean').config(['$routeProvider',
             templateUrl: 'views/achievements/view.html'
         }).
         when('/', {
-            templateUrl: 'views/index.html'
+            templateUrl: 'views/achievements/list.html'
         }).
         otherwise({
             redirectTo: '/'

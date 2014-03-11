@@ -1,8 +1,14 @@
-<section data-ng-controller="AchievementsController" data-ng-init="find()">
-	<ul class="articles unstyled">
-		<li data-ng-repeat="achievement in achievements">
-			<h2><a data-ng-href="#!/achievements/{{achievement._id}}">{{achievement.name}}</a></h2>
-		</li>
-	</ul>
-	<h1 data-ng-hide="!achievements || achievements.length">No achievements yet. <br> Why don't you <a href="/#!/achievements/create">Create One</a>?</h1>
+<section data-ng-controller="AchievementsController" data-ng-init="find()" >
+	<div data-ng-show="global.authenticated">
+    <ul class="articles unstyled">
+  		<li data-ng-repeat="achievement in achievements">
+  			<h2><a data-ng-href="#!/achievements/{{achievement._id}}">{{achievement.name}}</a></h2>
+  		</li>
+  	</ul>
+  	<h1 data-ng-hide="!achievements || achievements.length">No achievements yet. 
+    <br> Why don't you <a href="/#!/achievements/create">Create One</a>?</h1>
+  </div>
+  <div data-ng-hide="global.authenticated">
+    <h1>login please</h1>
+  </div>
 </section>

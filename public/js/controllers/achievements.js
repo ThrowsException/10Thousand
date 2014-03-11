@@ -2,6 +2,10 @@ angular.module('mean.articles').controller('AchievementsController', ['$scope', 
     $scope.global = Global;
     var updates = [];
     var chart; 
+    
+    $scope.date;
+    $scope.hours = 0;
+
     $scope.create = function() {
         var achievement = new Achievements({
             name: this.name
@@ -62,11 +66,13 @@ angular.module('mean.articles').controller('AchievementsController', ['$scope', 
         method: "POST",
         beforeSend: function() { if(chart.showLoading === 'function') { chart.showLoading(); } },
         data: {
-          date: Date.parse($("#date").val() + ' UTC'),
-          hours: $("#hours").val()
+          date: $scope.date,
+          hours: $scope.hours
         }
       })
       .done(function(data) {
+        $scope.hours = 0;
+        $scope.$apply;
         totalHours = 0;
         updates.push(data);
         sortUpdates();
