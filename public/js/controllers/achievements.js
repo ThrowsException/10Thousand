@@ -1,10 +1,10 @@
 angular.module('mean.articles').controller('AchievementsController', ['$scope', '$routeParams', '$location', 'Global', 'Achievements', 'Updates', function ($scope, $routeParams, $location, Global, Achievements, Updates) {
     $scope.global = Global;
+    $scope.date = new Date();
+    $scope.hours = 0;
+
     var updates = [];
     var chart; 
-    
-    $scope.date;
-    $scope.hours = 0;
 
     $scope.create = function() {
         var achievement = new Achievements({
@@ -61,26 +61,20 @@ angular.module('mean.articles').controller('AchievementsController', ['$scope', 
     };
 
     $scope.sendUpdate = function() {
-      $.ajax({
-        url: "/update/" + $scope.achievement._id,
-        method: "POST",
-        beforeSend: function() { if(chart.showLoading === 'function') { chart.showLoading(); } },
-        data: {
-          date: $scope.date,
-          hours: $scope.hours
-        }
-      })
-      .done(function(data) {
+      var update = new Updates({ date: $scope.date, hours: $scope.hours, achievementId: $scope.achievement._id });
+      chart.showLoading();
+      update.$save(null, function(data) {
         $scope.hours = 0;
-        $scope.$apply;
+        $scope.$apply();
         totalHours = 0;
         updates.push(data);
         sortUpdates();
         chart.series[0].setData(sumUpdates());
-      })
-      .always(function() { 
         chart.hideLoading();
-      });    
+      },
+      function(data) {
+        chart.hideLoading();
+      });
     };
 
     function createChart(achievement) {
@@ -145,6 +139,4 @@ angular.module('mean.articles').controller('AchievementsController', ['$scope', 
         }
       });
     }
-
-    //$('#submit').click(update);
 }]);
