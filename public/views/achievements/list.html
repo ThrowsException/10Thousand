@@ -12,6 +12,37 @@
   </div>
   <div data-ng-hide="global.authenticated">
     <h1>Welcome to 10 Thousand</h1>
-    <h1>Please take a minute to signup</h1>
+    <div>
+      <p>
+        Ten Thousand provides a way to track your progress in hours over long periods of time. Maybe you're trying to learn guitar or a new language. Ten thousand lets tou track how much time you're spending refining or learning a new skill. 
+      </p>
+
+      <p>Ten Thousand lets your create any goal and being tracking it easily take a second to try</p>
+
+      <section data-ng-controller="DemoAchievementsController">
+        <h2>Learning Italian</h2>
+        <div id="chart"></div>
+        <div class="form-horizontal" data-ng-init="createChart()">
+          <div class="control-group">
+            <label class="control-label" for="date">Date</label>
+            <div class="controls">
+                <input type="date" id="date" ng-model="date" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="hours">Hours</label>
+            <div class="controls">
+                <input type="number" ng-model="hours" required>
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+                <input type="button" class="btn" data-ng-click="sendUpdate()" value="Submit">
+            </div>
+          </div>
+        </div>
+      </section>
+    
+    </div>
   </div>
 </section>
