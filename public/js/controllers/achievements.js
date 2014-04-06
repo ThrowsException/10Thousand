@@ -112,6 +112,11 @@ angular.module('mean.articles').controller('AchievementsController', ['$scope', 
                 y: 10
               }
             },
+            yAxis: {
+              title: {
+                text: "Hours"
+              }
+            },
             series: [{
               data: series
             }]
