@@ -4,8 +4,10 @@
   		<li data-ng-repeat="achievement in achievements">
   			<h2><a data-ng-href="#!/achievements/{{achievement._id}}">{{achievement.name}}</a></h2>
   		</li>
+      <li data-ng-show="achievements"><a data-ng-href="#!/achievements/create">New</a></li>
   	</ul>
-  	<h1 data-ng-hide="!achievements || achievements.length">No achievements yet. 
+    
+    <h1 data-ng-hide="!achievements || achievements.length">No achievements yet. 
     <br> Why don't you <a href="/#!/achievements/create">Create One</a>?</h1>
   </div>
   <div data-ng-hide="global.authenticated">
