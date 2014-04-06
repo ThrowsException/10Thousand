@@ -130,69 +130,6 @@
                     // test URL location to new object
                     expect($location.path()).toBe('/achievements/' + responseArticleData()._id);
                 });
-
-            it('$scope.update() should update a valid article', inject(function(Articles) {
-
-                // fixture rideshare
-                var putArticleData = function() {
-                    return {
-                        _id: '525a8422f6d0f87f0e407a33',
-                        title: 'An Article about MEAN',
-                        to: 'MEAN is great!'
-                    };
-                };
-
-                // mock article object from form
-                var article = new Articles(putArticleData());
-
-                // mock article in scope
-                scope.article = article;
-
-                // test PUT happens correctly
-                $httpBackend.expectPUT(/articles\/([0-9a-fA-F]{24})$/).respond();
-
-                // testing the body data is out for now until an idea for testing the dynamic updated array value is figured out
-                //$httpBackend.expectPUT(/articles\/([0-9a-fA-F]{24})$/, putArticleData()).respond();
-                /*
-                Error: Expected PUT /articles\/([0-9a-fA-F]{24})$/ with different data
-                EXPECTED: {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!"}
-                GOT:      {"_id":"525a8422f6d0f87f0e407a33","title":"An Article about MEAN","to":"MEAN is great!","updated":[1383534772975]}
-                */
-
-                // run controller
-                scope.update();
-                $httpBackend.flush();
-
-                // test URL location to new object
-                expect($location.path()).toBe('/articles/' + putArticleData()._id);
-
-            }));
-
-            it('$scope.remove() should send a DELETE request with a valid articleId' +
-                'and remove the article from the scope', inject(function(Articles) {
-
-                    // fixture rideshare
-                    var article = new Articles({
-                        _id: '525a8422f6d0f87f0e407a33'
-                    });
-
-                    // mock rideshares in scope
-                    scope.articles = [];
-                    scope.articles.push(article);
-
-                    // test expected rideshare DELETE request
-                    $httpBackend.expectDELETE(/articles\/([0-9a-fA-F]{24})$/).respond(204);
-
-                    // run controller
-                    scope.remove(article);
-                    $httpBackend.flush();
-
-                    // test after successful delete URL location articles lis
-                    //expect($location.path()).toBe('/articles');
-                    expect(scope.articles.length).toBe(0);
-
-                }));
-
         });
 
     });
