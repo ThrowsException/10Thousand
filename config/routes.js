@@ -64,6 +64,8 @@ module.exports = function(app, passport, auth) {
     app.get('/achievements/:id', auth.requiresLogin, achievements.detail);
     app.post('/achievements', auth.requiresLogin, achievements.create);
 
+    app.get('/api/achievements', passport.authenticate('basic'), achievements.list);
+
     var updates = require('../app/controllers/updates');
     app.post('/update/:id', auth.requiresLogin, updates.create);
 

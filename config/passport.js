@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     LocalStrategy = require('passport-local').Strategy,
+    BasicStrategy = require('passport-http').BasicStrategy,
     TwitterStrategy = require('passport-twitter').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
     GitHubStrategy = require('passport-github').Strategy,
@@ -30,6 +31,34 @@ module.exports = function(passport) {
         function(email, password, done) {
             User.findOne({
                 email: email
+            }, function(err, user) {
+                if (err) {
+                    return done(err);
+                }
+                if (!user) {
+                    return done(null, false, {
+                        message: 'Unknown user'
+                    });
+                }
+                if (!user.authenticate(password)) {
+                    return done(null, false, {
+                        message: 'Invalid password'
+                    });
+                }
+                return done(null, user);
+            });
+        }
+    ));
+
+    // Use the BasicStrategy within Passport.
+    // Strategies in Passport require a `verify` function, which accept
+    // credentials (in this case, a username and password), and invoke a callback
+    // with a user object.
+    passport.use(new BasicStrategy({
+      },
+      function(username, password, done) {
+            User.findOne({
+                username: username
             }, function(err, user) {
                 if (err) {
                     return done(err);
