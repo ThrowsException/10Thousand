@@ -13,8 +13,8 @@
     "npm": "6.4.x"
   },
   "scripts": {
-    "start": "node node_modules/grunt-cli/bin/grunt",
-    "test": "node node_modules/grunt-cli/bin/grunt test",
+    "start": "grunt",
+    "test": "grunt test",
     "postinstall": "bower install"
   },
   "dependencies": {
