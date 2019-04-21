@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { ResponsiveLine, Line } from "@nivo/line";
 
@@ -19,21 +19,48 @@ class Welcome extends React.Component {
   }
 }
 
+const TrackingForm = ({ submit }) => {
+  const [date, setDate] = useState(new Date());
+  const [hours, setHours] = useState(0);
+
+  return (
+    <>
+      <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+      <input
+        type="number"
+        value={hours}
+        onChange={e => setHours(e.target.value)}
+      />
+      <button
+        onClick={() => {
+          submit(date, hours);
+        }}
+      >
+        Submit
+      </button>
+    </>
+  );
+};
+
 class Chart extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [] };
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  handleClick(date, hours) {
+    const newElement = { x: date, y: hours };
+    this.setState(prevState => ({
+      data: [...prevState.data, newElement]
+    }));
+  }
+
   render() {
     const data = [
       {
         id: "achievement",
-        data: [
-          { x: "2018-01-01", y: 7 },
-          { x: "2018-01-02", y: 5 },
-          { x: "2018-01-03", y: 11 },
-          { x: "2018-01-04", y: 9 },
-          { x: "2018-01-05", y: 12 },
-          { x: "2018-01-06", y: 16 },
-          { x: "2018-01-07", y: 13 },
-          { x: "2018-01-08", y: 13 }
-        ]
+        data: this.state.data
       }
     ];
 
@@ -53,8 +80,9 @@ class Chart extends React.Component {
     );
 
     return (
-      <div style={{ height: "900px", width: "1000px" }}>
+      <div style={{ height: "600px", width: "900px" }}>
         <MyResponsiveLine data={data} />
+        <TrackingForm submit={this.handleClick} />
       </div>
     );
   }
