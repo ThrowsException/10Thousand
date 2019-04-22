@@ -29,7 +29,7 @@ const TrackingForm = ({ submit }) => {
       <input
         type="number"
         value={hours}
-        onChange={e => setHours(e.target.value)}
+        onChange={e => setHours(parseInt(e.target.value))}
       />
       <button
         onClick={() => {
@@ -51,9 +51,29 @@ class Chart extends React.Component {
 
   handleClick(date, hours) {
     const newElement = { x: date, y: hours };
-    this.setState(prevState => ({
-      data: [...prevState.data, newElement]
-    }));
+
+    this.setState(prevState => {
+      if (prevState.data.length == 0) {
+        return { data: [newElement] };
+      }
+
+      // find if date already exists
+      const updateExisting = prevState.data.find(o => o.x === date);
+
+      // Find item to update
+      if (updateExisting) {
+        let data = prevState.data.map(el => {
+          if (el.x == date) {
+            return Object.assign({}, el, { y: hours });
+          } else return el;
+        });
+        return { data };
+      }
+
+      return {
+        data: [...prevState.data, { x: date, y: hours }]
+      };
+    });
   }
 
   render() {
