@@ -1,13 +1,28 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { ResponsiveLine, Line } from "@nivo/line";
+import styled from "styled-components";
+
+const Container = styled.div`
+  display: grid;
+  grid-template-areas:
+    "content"
+`
+
+const Layout = styled.div`
+  grid-area: content;
+  height: 75vh;
+  width: 100vw;
+`
 
 const Welcome = props => {
   return (
-    <>
-      <h1>Hello, {props.name}</h1>
-      <Chart />
-    </>
+    <Container>
+      <Layout>
+        <h1>Hello, {props.name}</h1>
+        <Chart />
+      </Layout>
+    </Container>
   );
 };
 
@@ -78,7 +93,7 @@ const Chart = () => {
   };
 
   return (
-    <div style={{ height: "600px", width: "900px" }}>
+    <>
       <MyResponsiveLine
         achievement={[
           {
@@ -88,8 +103,9 @@ const Chart = () => {
         ]}
       />
       <TrackingForm submit={handleClick} />
-    </div>
+    </>
   );
 };
+
 
 ReactDOM.render(<Welcome />, document.getElementById("root"));
