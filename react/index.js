@@ -50,7 +50,7 @@ const Chart = () => {
       if (updateExisting) {
         let updated = data.map(el => {
           if (el.x == date) {
-            return Object.assign({}, el, { y: hours });
+            return Object.assign({}, el, { y: hours + el.y });
           } else return el;
         });
         setData(updated);
