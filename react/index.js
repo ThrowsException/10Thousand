@@ -5,15 +5,14 @@ import styled from "styled-components";
 
 const Container = styled.div`
   display: grid;
-  grid-template-areas:
-    "content"
-`
+  grid-template-areas: "content";
+`;
 
 const Layout = styled.div`
   grid-area: content;
   height: 75vh;
   width: 100vw;
-`
+`;
 
 const Welcome = props => {
   return (
@@ -92,13 +91,24 @@ const Chart = () => {
     );
   };
 
+  let total = 0;
+  let sorted = data
+    .sort((a, b) => {
+      return new Date(a.x) - new Date(b.x);
+    })
+    .map(x => {
+      total += x.y;
+      x.y = total;
+      return x;
+    });
+
   return (
     <>
       <MyResponsiveLine
         achievement={[
           {
             id: "achievement",
-            data: data
+            data: sorted
           }
         ]}
       />
@@ -106,6 +116,5 @@ const Chart = () => {
     </>
   );
 };
-
 
 ReactDOM.render(<Welcome />, document.getElementById("root"));
