@@ -24,9 +24,9 @@ module.exports = function(passport) {
     });
 
     //Use local strategy
-    passport.use(new LocalStrategy({
+    passport.use('local', new LocalStrategy({
             usernameField: 'email',
-            passwordField: 'password'
+            passwordField: 'password',
         },
         function(email, password, done) {
             User.findOne({
@@ -35,6 +35,7 @@ module.exports = function(passport) {
                 if (err) {
                     return done(err);
                 }
+                console.log(user);
                 if (!user) {
                     return done(null, false, {
                         message: 'Unknown user'
@@ -55,6 +56,7 @@ module.exports = function(passport) {
     // credentials (in this case, a username and password), and invoke a callback
     // with a user object.
     passport.use(new BasicStrategy({
+        passReqToCallback : true
       },
       function(username, password, done) {
             User.findOne({

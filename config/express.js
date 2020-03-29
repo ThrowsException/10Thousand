@@ -2,12 +2,17 @@
  * Module dependencies.
  */
 var express = require("express"),
-  mongoStore = require("connect-mongo")(express),
+  session = require("express-session"),
+  compress = require('compression'),
+  cookieParser = require("cookie-parser"),
+  methodOverride = require("method-override"),
+  morgan = require("morgan"),
   flash = require("connect-flash"),
   helpers = require("view-helpers"),
   config = require("./config"),
-  MongoStore = require("connect-mongo")(express),
-  mongoose = require("mongoose");
+  MongoStore = require("connect-mongo")(session),
+  mongoose = require("mongoose"),
+  auth = require("./middlewares/authorization");
 
 module.exports = function(app, passport, db) {
   app.set("showStackError", true);
@@ -17,7 +22,7 @@ module.exports = function(app, passport, db) {
 
   //Should be placed before express.static
   app.use(
-    express.compress({
+    compress({
       filter: function(req, res) {
         return /json|text|javascript|css/.test(res.getHeader("Content-Type"));
       },
@@ -26,13 +31,9 @@ module.exports = function(app, passport, db) {
   );
 
   //Setting the fav icon and static folder
-  app.use(express.favicon());
   app.use(express.static(config.root + "/public"));
 
-  //Don't use logger for test env
-  if (process.env.NODE_ENV !== "test") {
-    app.use(express.logger("dev"));
-  }
+  app.use(morgan('combined'));
 
   //Set views path, template engine and default layout
   app.set("views", config.root + "/app/views");
@@ -41,58 +42,60 @@ module.exports = function(app, passport, db) {
   //Enable jsonp
   app.enable("jsonp callback");
 
-  app.configure(function() {
-    //cookieParser should be above session
-    app.use(express.cookieParser());
+  //cookieParser should be above session
+  app.use(cookieParser());
+  
+  //connect flash for flash messages
+  app.use(flash());
 
-    // request body parsing middleware should be above methodOverride
-    app.use(express.urlencoded());
-    app.use(express.json());
-    app.use(express.methodOverride());
+  // request body parsing middleware should be above methodOverride
+  app.use(express.urlencoded());
+  app.use(express.json());
+  app.use(methodOverride());
 
-    //express/mongo session storage
-    app.use(
-      express.session({
-        secret: "tenthousand",
-        store: new MongoStore({
-          mongooseConnection: mongoose.connection
-        })
+  //express/mongo session storage
+  app.use(session({
+      secret: "tenthousand",
+      store: new MongoStore({
+        mongooseConnection: mongoose.connection
       })
-    );
+    })
+  );
 
-    //connect flash for flash messages
-    app.use(flash());
+  //dynamic helpers
+  app.use(helpers(config.app.name));
 
-    //dynamic helpers
-    app.use(helpers(config.app.name));
+  //use passport session
+  app.use(passport.initialize());
+  app.use(passport.session());
 
-    //use passport session
-    app.use(passport.initialize());
-    app.use(passport.session());
+  //Assume "not found" in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
+  app.use(function(err, req, res, next) {
+    //Treat as 404
+    if (~err.message.indexOf("not found")) return next();
 
-    //routes should be at the last
-    app.use(app.router);
+    //Log it
+    console.error(err.stack);
 
-    //Assume "not found" in the error msgs is a 404. this is somewhat silly, but valid, you can do whatever you like, set properties, use instanceof etc.
-    app.use(function(err, req, res, next) {
-      //Treat as 404
-      if (~err.message.indexOf("not found")) return next();
-
-      //Log it
-      console.error(err.stack);
-
-      //Error page
-      res.status(500).render("500", {
-        error: err.stack
-      });
+    //Error page
+    res.status(500).render("500", {
+      error: err.stack
     });
+  });
 
-    //Assume 404 since no middleware responded
-    app.use(function(req, res, next) {
-      res.status(404).render("404", {
-        url: req.originalUrl,
-        error: "Not found"
-      });
+  
+  //bootstrap passport config
+  require("./passport")(passport);
+  
+  //Bootstrap routes
+  require("./routes")(app, passport, auth);
+  
+  
+  //Assume 404 since no middleware responded
+  app.use(function(req, res, next) {
+    res.status(404).render("404", {
+      url: req.originalUrl,
+      error: "Not Found"
     });
   });
 };

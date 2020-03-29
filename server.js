@@ -38,7 +38,7 @@ var walk = function(path) {
 walk(models_path);
 
 //bootstrap passport config
-require("./config/passport")(passport);
+// require("./config/passport")(passport);
 
 var app = express();
 
@@ -46,7 +46,7 @@ var app = express();
 require("./config/express")(app, passport, db);
 
 //Bootstrap routes
-require("./config/routes")(app, passport, auth);
+//require("./config/routes")(app, passport, auth);
 
 //Start the app by listening on <port>
 var port = process.env.PORT || config.port;
